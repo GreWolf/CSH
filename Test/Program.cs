@@ -16,6 +16,11 @@ namespace Test
         {
             const string fileName = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx";
 
+            string[] paths = { 
+                @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx",
+                @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx"
+            }
+
             DataTable dt = new DataTable();
 
             dt.Clear();
