@@ -6,30 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Drawing;
+using Prism.Mvvm;
 
 namespace Test
 {
-    class ExcelHandler
+    class ExcelHandlerModel : BindableBase
     {
         public List<string> paths { get; set; } = new List<string> {
                 @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx",
                 @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx",
             };
 
-        private DataTable resultTable = new DataTable();
-        private DataTable SummaryTable = new DataTable();
+        public DataTable ResultTable = new DataTable();
+        public DataTable SummaryTable = new DataTable();
 
 
-
-        public ExcelHandler()
+        public ExcelHandlerModel()
         {
-            resultTable.Clear();
-            resultTable.Columns.Add("ОСВ");
-            resultTable.Columns.Add("КФО", System.Type.GetType("System.Int32"));
-            resultTable.Columns.Add("Контрагент");
-            resultTable.Columns.Add("Договор");
-            resultTable.Columns.Add("Дебет", System.Type.GetType("System.Double"));
-            resultTable.Columns.Add("Кредит", System.Type.GetType("System.Double"));
+            ResultTable.Clear();
+            ResultTable.Columns.Add("ОСВ");
+            ResultTable.Columns.Add("КФО", System.Type.GetType("System.Int32"));
+            ResultTable.Columns.Add("Контрагент");
+            ResultTable.Columns.Add("Договор");
+            ResultTable.Columns.Add("Дебет", System.Type.GetType("System.Double"));
+            ResultTable.Columns.Add("Кредит", System.Type.GetType("System.Double"));
 
             SummaryTable.Clear();
             SummaryTable.Columns.Add("ОСВ");
@@ -37,7 +37,6 @@ namespace Test
 
         }
        
-
 
         public void ParseExcelFiles()
         {
@@ -51,15 +50,14 @@ namespace Test
 
                 catch (System.IO.IOException e)
                 {
-                    Console.WriteLine("{0} - ошибка {1}!", wb_path, e.GetType().Name);
+                    //Console.WriteLine("{0} - ошибка {1}!", wb_path, e.GetType().Name);
+                    Console.WriteLine("{0} - ошибка {1}!", wb_path, e.Message);
                     continue;
                 }
 
                 Console.WriteLine("{0} - успешно!", wb_path);
             }
         }
-
-
 
 
         private void ParseExcelFile(string wb_path)
@@ -121,16 +119,18 @@ namespace Test
 
                                 if (debet != "" || kredit != "")
                                 {
-                                    DataRow _row = resultTable.NewRow();
+                                    DataRow _ResultRow = ResultTable.NewRow();
 
-                                    _row["ОСВ"] = OSV;
-                                    _row["КФО"] = KFO;
-                                    _row["Контрагент"] = partner;
-                                    _row["Договор"] = contract;
-                                    _row["Дебет"] = debet == "" ? 0 : Convert.ToDouble(debet.Replace(".", ","));
-                                    _row["Кредит"] = kredit == "" ? 0 : Convert.ToDouble(kredit.Replace(".", ","));
+                                    _ResultRow["ОСВ"] = OSV;
+                                    _ResultRow["КФО"] = KFO;
+                                    _ResultRow["Контрагент"] = partner;
+                                    _ResultRow["Договор"] = contract;
+                                    _ResultRow["Дебет"] = debet == "" ? 0 : Convert.ToDouble(debet.Replace(".", ","));
+                                    _ResultRow["Кредит"] = kredit == "" ? 0 : Convert.ToDouble(kredit.Replace(".", ","));
 
-                                    resultTable.Rows.Add(_row);
+                                    ResultTable.Rows.Add(_ResultRow);
+                                    RaisePropertyChanged(nameof(ResultTable));
+
                                     ContractCountPerKFO++;
 
                                 }
@@ -142,20 +142,21 @@ namespace Test
                     }
                 }
 
-                DataRow _summarizeRow = SummaryTable.NewRow();
-                _summarizeRow["ОСВ"] = OSV;
-                _summarizeRow["Количество контрактов"] = ContractCountPerKFO;
-                SummaryTable.Rows.Add(_summarizeRow);
+                DataRow _SummaryRow = SummaryTable.NewRow();
+                _SummaryRow["ОСВ"] = OSV;
+                _SummaryRow["Количество контрактов"] = ContractCountPerKFO;
+                SummaryTable.Rows.Add(_SummaryRow);
+
+                RaisePropertyChanged(nameof(SummaryTable));
 
             }
         }
 
 
-
         public void SaveResult(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - result.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
-            destWB.Worksheets.Add(resultTable, "Результат");
+            destWB.Worksheets.Add(ResultTable, "Результат");
             destWB.SaveAs(path);
             //Console.ReadKey();
         }

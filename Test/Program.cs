@@ -15,7 +15,7 @@ namespace Test
                 @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx",
             };
 
-            var EHandler = new ExcelHandler();
+            var EHandler = new ExcelHandlerModel();
 
             EHandler.paths = paths;
 
