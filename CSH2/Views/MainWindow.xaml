@@ -13,7 +13,7 @@
 
     <StackPanel HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top">
         <Button Content="Запуск" Command="{Binding Start, Mode=OneWay}" />
-        <DataGrid ItemsSource="{Binding SummaryTable, Mode=OneWay}" />
+        <DataGrid ItemsSource="{Binding SummaryTable, BindsDirectlyToSource=True, IsAsync=True, Mode=OneWay}" ScrollViewer.CanContentScroll="True" />
     </StackPanel>
 
 </Window>

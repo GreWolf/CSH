@@ -13,9 +13,17 @@ namespace CSH2.Models
     class ExcelHandlerModel : BindableBase
     {
         public List<string> paths { get; set; } = new List<string> {
-                @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx",
-                @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx",
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.41.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.43.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.44.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.45.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 401.40.xlsx" ,
+                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 401.60.xlsx" ,
             };
+
+        
 
         public DataTable ResultTable = new DataTable();
         public DataTable SummaryTable = new DataTable();
@@ -153,7 +161,7 @@ namespace CSH2.Models
         }
 
 
-        public void SaveResult(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - result.xlsx")
+        public void SaveResult(string path = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - result.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
             destWB.Worksheets.Add(ResultTable, "Результат");
@@ -162,7 +170,7 @@ namespace CSH2.Models
         }
 
 
-        public void SaveSummary(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - summarize.xlsx")
+        public void SaveSummary(string path = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - summarize.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
             destWB.Worksheets.Add(SummaryTable, "Итоги");

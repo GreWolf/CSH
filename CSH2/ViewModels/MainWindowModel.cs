@@ -24,7 +24,16 @@ namespace CSH2.ViewModels
                 _model.paths = paths;
             });
 
-            Start = new DelegateCommand(() => _model.ParseExcelFiles());
+            Start = new DelegateCommand(() => {
+
+                Task.Factory.StartNew(() =>
+                {
+                    _model.ParseExcelFiles();
+                    _model.SaveResult();
+                    _model.SaveSummary();
+                });
+                
+            });
         }
 
         public DelegateCommand<List<string>> SetPaths { get;  }
