@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CSH2.ViewModels;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,27 @@ namespace CSH2
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.DefaultExt = ".xlsx"; // Default file extension
+            openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            openFileDialog.ShowDialog();
+
+
+            var vm = (MainWindowModel)this.DataContext;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                //var collection = PathsList.ItemsSource;
+                foreach (string filename in openFileDialog.FileNames)
+                    //PathsList.Items.Add(filename);
+                    vm.Paths.Add(filename);
+            }
         }
     }
 }

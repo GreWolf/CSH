@@ -7,27 +7,31 @@ using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Drawing;
 using Prism.Mvvm;
+using System.Collections.ObjectModel;
 
 namespace CSH2.Models
 {
     class ExcelHandlerModel : BindableBase
     {
-        public List<string> paths { get; set; } = new List<string> {
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.34.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.41.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.43.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.44.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 209.45.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 401.40.xlsx" ,
-                @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 401.60.xlsx" ,
+
+        //private static string dirpath = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\";
+        private static string dirpath = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\";
+
+        public ObservableCollection<string> paths { get; set; } = new ObservableCollection<string> {
+                dirpath + "ОСВ 205.31.xlsx" ,
+                dirpath + "ОСВ 209.34.xlsx" ,
+                dirpath + "ОСВ 209.41.xlsx" ,
+                dirpath + "ОСВ 209.43.xlsx" ,
+                dirpath + "ОСВ 209.44.xlsx" ,
+                dirpath + "ОСВ 209.45.xlsx" ,
+                dirpath + "ОСВ 401.40.xlsx" ,
+                dirpath + "ОСВ 401.60.xlsx" ,
             };
 
         
 
         public DataTable ResultTable = new DataTable();
         public DataTable SummaryTable = new DataTable();
-
 
         public ExcelHandlerModel()
         {
@@ -40,7 +44,7 @@ namespace CSH2.Models
             ResultTable.Columns.Add("Кредит", System.Type.GetType("System.Double"));
 
             SummaryTable.Clear();
-            SummaryTable.Columns.Add("ОСВ");
+            SummaryTable.Columns.Add("Файл");
             SummaryTable.Columns.Add("Количество контрактов", System.Type.GetType("System.Int32"));
 
         }
@@ -151,7 +155,7 @@ namespace CSH2.Models
                 }
 
                 DataRow _SummaryRow = SummaryTable.NewRow();
-                _SummaryRow["ОСВ"] = OSV;
+                _SummaryRow["Файл"] = wb_path;
                 _SummaryRow["Количество контрактов"] = ContractCountPerKFO;
                 SummaryTable.Rows.Add(_SummaryRow);
 
@@ -161,7 +165,7 @@ namespace CSH2.Models
         }
 
 
-        public void SaveResult(string path = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - result.xlsx")
+        public void SaveResult(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - result.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
             destWB.Worksheets.Add(ResultTable, "Результат");
@@ -170,7 +174,7 @@ namespace CSH2.Models
         }
 
 
-        public void SaveSummary(string path = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - summarize.xlsx")
+        public void SaveSummary(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - summarize.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
             destWB.Worksheets.Add(SummaryTable, "Итоги");

@@ -12,8 +12,14 @@
     </Window.DataContext>
 
     <StackPanel HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top">
+        <Button Content="Выбрать файлы" Click="Button_Click"/>
+        <DataGrid Name="PathsList" ItemsSource="{Binding  Paths, Mode=OneWay}" AutoGenerateColumns="False" HeadersVisibility="None">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Mode=OneWay}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Content="Запуск" Command="{Binding Start, Mode=OneWay}" />
-        <DataGrid ItemsSource="{Binding SummaryTable, BindsDirectlyToSource=True, IsAsync=True, Mode=OneWay}" ScrollViewer.CanContentScroll="True" />
+        <DataGrid ItemsSource="{Binding SummaryTable, IsAsync=True, Mode=OneWay}" MinColumnWidth="200" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" />
     </StackPanel>
 
 </Window>
