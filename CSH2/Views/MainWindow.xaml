@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSH2"
         xmlns:vm="clr-namespace:CSH2.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          TextElement.FontWeight="Regular"
@@ -14,34 +14,45 @@
          TextOptions.TextFormattingMode="Ideal"
          TextOptions.TextRenderingMode="Auto"
          Background="{DynamicResource MaterialDesignPaper}"
-         FontFamily="{DynamicResource MaterialDesignFont}"
+         FontFamily="{DynamicResource MaterialDesignFont}" HorizontalContentAlignment="Right"
         
         
         >
     <Window.DataContext>
         <vm:MainWindowModel></vm:MainWindowModel>
     </Window.DataContext>
-
-    <TabControl TabStripPlacement="Left">
+    <DockPanel >
+        <TabControl DockPanel.Dock="Top" TabStripPlacement="Left" Margin="0" HorizontalContentAlignment="Center" BorderBrush="{x:Null}">
+            <TabItem Header="ОСВ">
+                <StackPanel Margin="0" VerticalAlignment="Top">
+                    <TextBlock Text="С помощью кнопки ниже нужно выбрать файлы EXCEL (формат xlsx), которые необходимо обработать. Выбранные файлы появятся в таблице ниже." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
+                    <Button Content="Выбрать файлы" Click="Button_Click" Margin="50,5"/>
+                    <DataGrid Style="{DynamicResource MaterialDesignDataGrid}" ItemsSource="{Binding SummaryTableTest, IsAsync=True, Mode=OneWay}" MinColumnWidth="200" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" GridLinesVisibility="Horizontal" HeadersVisibility="Column" Margin="0" />
+                    <TextBlock Text="После нажатия кнопки 'Запуск' данные из указанных файлов будут сведены в общую таблицу EXCEL, которая отроется после выполнения. Её необходимо сохранить." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
+                    <Button Content="Запуск" Command="{Binding Start, Mode=OneWay}" Margin="50,5" />
+                </StackPanel>
+            </TabItem>
+            <!--<TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>-->
+        </TabControl>
+        <TextBlock DockPanel.Dock="Bottom" Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="©Семиноженко С.С." HorizontalAlignment="Right" VerticalAlignment="Bottom"></TextBlock>
+        
+    </DockPanel>
+    <!--<TabControl TabStripPlacement="Left">
         <TabItem Header="TabItem">
             <StackPanel Margin="0" VerticalAlignment="Top">
-                <TextBlock Text="С помощью кнопки ниже выбрать файлы EXCEL (формат xlsx), которые необходимо обработать. Выбранные файлы появятся в таблице ниже. Также ненужные файлы в таблице можно удалить)." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
+                <TextBlock Text="С помощью кнопки ниже нужно выбрать файлы EXCEL (формат xlsx), которые необходимо обработать. Выбранные файлы появятся в таблице ниже." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
                 <Button Content="Выбрать файлы" Click="Button_Click"/>
-
-                <DataGrid Style="{DynamicResource MaterialDesignDataGrid}" ItemsSource="{Binding SummaryTableTest, IsAsync=True, Mode=OneWay}" MinColumnWidth="200" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" GridLinesVisibility="Horizontal" HeadersVisibility="Column" />
-                <TextBlock Text="После нажатия кнопки 'Запуск' данные из указанных файлов будут сведены в общую таблицу EXCEL, которая отроется после выполнения. Её необходимо будет сохранть." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
+                <DataGrid Style="{DynamicResource MaterialDesignDataGrid}" ItemsSource="{Binding SummaryTableTest, IsAsync=True, Mode=OneWay}" MinColumnWidth="200" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" GridLinesVisibility="Horizontal" HeadersVisibility="Column" Margin="0,5" />
+                <TextBlock Text="После нажатия кнопки 'Запуск' данные из указанных файлов будут сведены в общую таблицу EXCEL, которая отроется после выполнения. Её необходимо сохранить." TextWrapping="WrapWithOverflow" Style="{DynamicResource MaterialDesignBody1TextBlock}" FontStretch="Expanded"/>
                 <Button Content="Запуск" Command="{Binding Start, Mode=OneWay}" />
             </StackPanel>
         </TabItem>
         <TabItem Header="TabItem">
             <Grid Background="#FFE5E5E5"/>
         </TabItem>
-    </TabControl>
+    </TabControl>-->
     
-    <!--<StackPanel HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top">
-        <Button Content="Выбрать файлы" Click="Button_Click"/>
-        <DataGrid ItemsSource="{Binding SummaryTableTest, IsAsync=True, Mode=OneWay}" MinColumnWidth="200" CanUserAddRows="False" VerticalScrollBarVisibility="Visible" />
-        <Button Content="Запуск" Command="{Binding Start, Mode=OneWay}" />
-    </StackPanel>-->
 
 </Window>
