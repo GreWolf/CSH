@@ -7,31 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Drawing;
 using Prism.Mvvm;
-using System.Collections.ObjectModel;
+using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace CSH2.Models
 {
     class ExcelHandlerModel : BindableBase
     {
-
-        //private static string dirpath = @"C:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\";
-        private static string dirpath = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\";
-
-        public ObservableCollection<string> paths { get; set; } = new ObservableCollection<string> {
-                dirpath + "ОСВ 205.31.xlsx" ,
-                dirpath + "ОСВ 209.34.xlsx" ,
-                dirpath + "ОСВ 209.41.xlsx" ,
-                dirpath + "ОСВ 209.43.xlsx" ,
-                dirpath + "ОСВ 209.44.xlsx" ,
-                dirpath + "ОСВ 209.45.xlsx" ,
-                dirpath + "ОСВ 401.40.xlsx" ,
-                dirpath + "ОСВ 401.60.xlsx" ,
-            };
-
-        
-
+    
         public DataTable ResultTable = new DataTable();
-        public DataTable SummaryTable = new DataTable();
+
+        public DataTable SummaryTableTest = new DataTable();
 
         public ExcelHandlerModel()
         {
@@ -43,36 +29,38 @@ namespace CSH2.Models
             ResultTable.Columns.Add("Дебет", System.Type.GetType("System.Double"));
             ResultTable.Columns.Add("Кредит", System.Type.GetType("System.Double"));
 
-            SummaryTable.Clear();
-            SummaryTable.Columns.Add("Файл");
-            SummaryTable.Columns.Add("Количество контрактов", System.Type.GetType("System.Int32"));
+            SummaryTableTest.Clear();
+            SummaryTableTest.Columns.Add("Файл");
+            SummaryTableTest.Columns.Add("Статус");
+            SummaryTableTest.Columns.Add("Количество контрактов", System.Type.GetType("System.Int32"));
 
         }
        
 
         public void ParseExcelFiles()
         {
-            foreach (var wb_path in paths)
+            foreach (DataRow row in SummaryTableTest.Rows)
             {
+                var wb_path = (string)row["Файл"];
                 try
                 {
-                    ParseExcelFile(wb_path);
+                    int ContractCountPerKFO = ParseExcelFile(wb_path);
+                    row["Статус"] = "Обработано";
+                    row["Количество контрактов"] = ContractCountPerKFO;
                 }
 
-
-                catch (System.IO.IOException e)
+                catch (System.IO.IOException)
                 {
-                    //Console.WriteLine("{0} - ошибка {1}!", wb_path, e.GetType().Name);
-                    Console.WriteLine("{0} - ошибка {1}!", wb_path, e.Message);
+                    row["Статус"] = "Ошибка";
+                    row["Количество контрактов"] = DBNull.Value;
                     continue;
                 }
 
-                Console.WriteLine("{0} - успешно!", wb_path);
             }
         }
 
 
-        private void ParseExcelFile(string wb_path)
+        private int ParseExcelFile(string wb_path)
         {
             using (var excelWorkbook = new XLWorkbook(wb_path))
             {
@@ -154,12 +142,8 @@ namespace CSH2.Models
                     }
                 }
 
-                DataRow _SummaryRow = SummaryTable.NewRow();
-                _SummaryRow["Файл"] = wb_path;
-                _SummaryRow["Количество контрактов"] = ContractCountPerKFO;
-                SummaryTable.Rows.Add(_SummaryRow);
 
-                RaisePropertyChanged(nameof(SummaryTable));
+                return ContractCountPerKFO;
 
             }
         }
@@ -177,9 +161,65 @@ namespace CSH2.Models
         public void SaveSummary(string path = @"D:\GoogleDrive\Roslesinforg\Дела\2020.07.14 - Ц\ОСВ 205.31 - summarize.xlsx")
         {
             XLWorkbook destWB = new XLWorkbook();
-            destWB.Worksheets.Add(SummaryTable, "Итоги");
+            destWB.Worksheets.Add(SummaryTableTest, "Итоги");
             destWB.SaveAs(path);
             //Console.ReadKey();
+        }
+
+
+        public void ExportToExcel(DataTable tbl, string excelFilePath = null)
+        {
+            try
+            {
+                if (tbl == null || tbl.Columns.Count == 0)
+                    throw new Exception("ExportToExcel: Null or empty input table!\n");
+
+                // load excel, and create a new workbook
+                var excelApp = new Excel.Application();
+                excelApp.Workbooks.Add();
+
+                // single worksheet
+                Excel._Worksheet workSheet = excelApp.ActiveSheet;
+
+                // column headings
+                for (var i = 0; i < tbl.Columns.Count; i++)
+                {
+                    workSheet.Cells[1, i + 1] = tbl.Columns[i].ColumnName;
+                }
+
+                // rows
+                for (var i = 0; i < tbl.Rows.Count; i++)
+                {
+                    // to do: format datetime values before printing
+                    for (var j = 0; j < tbl.Columns.Count; j++)
+                    {
+                        workSheet.Cells[i + 2, j + 1] = tbl.Rows[i][j];
+                    }
+                }
+
+                // check file path
+                if (!string.IsNullOrEmpty(excelFilePath))
+                {
+                    try
+                    {
+                        workSheet.SaveAs(excelFilePath);
+                        excelApp.Quit();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+                                            + ex.Message);
+                    }
+                }
+                else
+                { // no file path is given
+                    excelApp.Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ExportToExcel: \n" + ex.Message);
+            }
         }
 
 
