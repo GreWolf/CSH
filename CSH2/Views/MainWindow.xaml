@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSH2"
         xmlns:vm="clr-namespace:CSH2.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized"
+        Title="Помощник Цындымы" Height="450" Width="800" WindowState="Maximized"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
          TextElement.FontWeight="Regular"
@@ -36,7 +36,7 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>-->
         </TabControl>
-        <TextBlock DockPanel.Dock="Bottom" Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="©Семиноженко С.С." HorizontalAlignment="Right" VerticalAlignment="Bottom"></TextBlock>
+        <TextBlock DockPanel.Dock="Bottom" Style="{DynamicResource MaterialDesignCaptionTextBlock}" Text="© Семиноженко С.С." HorizontalAlignment="Right" VerticalAlignment="Bottom"></TextBlock>
         
     </DockPanel>
     <!--<TabControl TabStripPlacement="Left">

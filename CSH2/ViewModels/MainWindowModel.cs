@@ -25,25 +25,14 @@ namespace CSH2.ViewModels
             _model.PropertyChanged += (s, e) => { RaisePropertyChanged(e.PropertyName); };
 
 
-            Start = new DelegateCommand(() => {
-                _model.ResultTable.Clear();
-                //_model.SummaryTableTest.Clear();
-                _model.ParseExcelFiles();
-                _model.ExportToExcel(_model.ResultTable);
+            //Start = new DelegateCommand(() =>
+            //{
+            //    _model.ResultTable.Clear();
+            //    _model.ParseExcelFiles();
+            //    _model.ExportToExcel(_model.ResultTable);
+            //});
 
-
-                //string temppath = Path.GetTempPath() + "temp.xlsx";
-                //_model.SaveResult(temppath);
-                //Console.WriteLine(temppath);
-
-                //Excel.Application xlApp = new Excel.Application();  // create new Excel application
-                //xlApp.Visible = true;                               // application becomes visible
-                //xlApp.Workbooks.Open(temppath, ReadOnly: true);          // open the workbook from file path
-
-                //xlApp.Quit();
-                //_model.SaveResult();
-                //_model.SaveSummary();   
-            });
+            Start = new DelegateCommand(async () => await _start());
         }
 
 
@@ -52,6 +41,15 @@ namespace CSH2.ViewModels
         public DataTable ResultTable => _model.ResultTable;
         
         public DataTable SummaryTableTest => _model.SummaryTableTest;
+
+
+        private async Task _start()
+        {
+            await Task.Run(() => _model.ResultTable.Clear());
+            await Task.Run(() => _model.ParseExcelFiles());
+            await Task.Run(() => _model.ExportToExcel(_model.ResultTable));
+            //_model.ExportToExcel(_model.ResultTable);
+        }
 
 
 
