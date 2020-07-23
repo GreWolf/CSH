@@ -33,7 +33,7 @@ namespace CSH2
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.DefaultExt = ".xlsx"; // Default file extension
-            openFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+            openFileDialog.Filter = "Excel Files|*.xlsx;*.xlsm;*.xlsb;*.xltx;*.xltm;*.xls;*.xlt;*.xls;*.xml;*.xml;*.xlam;*.xla;*.xlw;*.xlr";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             //openFileDialog.ShowDialog();
 
