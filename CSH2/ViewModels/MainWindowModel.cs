@@ -18,19 +18,11 @@ namespace CSH2.ViewModels
 {
     class MainWindowModel : BindableBase
     {
-        readonly ExcelHandlerModel _model = new ExcelHandlerModel();
+        readonly ExcelHandlerModel2 _model = new ExcelHandlerModel2();
 
         public MainWindowModel()
         {
             _model.PropertyChanged += (s, e) => { RaisePropertyChanged(e.PropertyName); };
-
-
-            //Start = new DelegateCommand(() =>
-            //{
-            //    _model.ResultTable.Clear();
-            //    _model.ParseExcelFiles();
-            //    _model.ExportToExcel(_model.ResultTable);
-            //});
 
             Start = new DelegateCommand(async () => await _start());
         }
@@ -38,17 +30,26 @@ namespace CSH2.ViewModels
 
         public DelegateCommand Start { get;  }
 
-        public DataTable ResultTable => _model.ResultTable;
+        //public DataTable ResultTable => _model.ResultTable;
         
-        public DataTable SummaryTableTest => _model.SummaryTableTest;
+        public DataTable SummaryTableTest => _model.SummaryTable;
 
+
+        //private async Task _start()
+        //{
+        //    await Task.Run(() => _model.ResultTable.Clear());
+        //    await Task.Run(() => _model.ParseExcelFiles());
+        //    await Task.Run(() => _model.ExportToExcel(_model.ResultTable));
+        //    //_model.ExportToExcel(_model.ResultTable);
+        //}
 
         private async Task _start()
         {
-            await Task.Run(() => _model.ResultTable.Clear());
+            //await Task.Run(() => _model.ResultTable.Clear());
+            await Task.Run(() => _model.CreateNewWorkbook());
             await Task.Run(() => _model.ParseExcelFiles());
-            await Task.Run(() => _model.ExportToExcel(_model.ResultTable));
-            //_model.ExportToExcel(_model.ResultTable);
+            await Task.Run(() => _model.ShowResult());
+            //await Task.Run(() => _model.ExportToExcel(_model.ResultTable));
         }
 
 

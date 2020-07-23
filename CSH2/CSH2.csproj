@@ -108,6 +108,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\ExcelHandlerModel.cs" />
+    <Compile Include="Models\ExcelHandlerModel2.cs" />
     <Compile Include="ViewModels\MainWindowModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
