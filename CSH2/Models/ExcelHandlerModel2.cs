@@ -65,24 +65,31 @@ namespace CSH2.Models
 
         public void ParseExcelFiles()
         {
-            ClearSummaryTable();
-
-            foreach (DataRow row in SummaryTable.Rows)
+            if (SummaryTable.Rows.Count > 0)
             {
-                var wb_path = (string)row["Файл"];
-                try
-                {
-                    int ContractCountPerKFO = ParseExcelFile(wb_path);
-                    row["Статус"] = "Обработано";
-                    row["Количество контрактов"] = ContractCountPerKFO;
-                }
+                ClearSummaryTable();
 
-                catch (System.IO.IOException)
+                foreach (DataRow row in SummaryTable.Rows)
                 {
-                    row["Статус"] = "Ошибка";
-                    row["Количество контрактов"] = DBNull.Value;
-                    continue;
+                    var wb_path = (string)row["Файл"];
+                    try
+                    {
+                        int ContractCountPerKFO = ParseExcelFile(wb_path);
+                        row["Статус"] = "Обработано";
+                        row["Количество контрактов"] = ContractCountPerKFO;
+                    }
+
+                    catch (System.IO.IOException)
+                    {
+                        row["Статус"] = "Ошибка";
+                        row["Количество контрактов"] = DBNull.Value;
+                        continue;
+                    }
                 }
+                                                
+                table.ListRows.Item[2].Delete();
+                         
+
             }
 
             table.ShowTotals = true;
@@ -92,10 +99,10 @@ namespace CSH2.Models
 
             table.Range.Columns.AutoFit();
 
-            table.ListRows.Item[2].Delete();
-
             worksheet.Columns[3].ColumnWidth = 50;
             worksheet.Columns[4].ColumnWidth = 50;
+
+
 
         }
 

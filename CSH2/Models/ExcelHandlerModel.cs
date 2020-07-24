@@ -39,24 +39,26 @@ namespace CSH2.Models
 
         public void ParseExcelFiles()
         {
-            foreach (DataRow row in SummaryTableTest.Rows)
-            {
-                var wb_path = (string)row["Файл"];
-                try
-                {
-                    int ContractCountPerKFO = ParseExcelFile(wb_path);
-                    row["Статус"] = "Обработано";
-                    row["Количество контрактов"] = ContractCountPerKFO;
-                }
 
-                catch (System.IO.IOException)
+                foreach (DataRow row in SummaryTableTest.Rows)
                 {
-                    row["Статус"] = "Ошибка";
-                    row["Количество контрактов"] = DBNull.Value;
-                    continue;
-                }
+                    var wb_path = (string)row["Файл"];
+                    try
+                    {
+                        int ContractCountPerKFO = ParseExcelFile(wb_path);
+                        row["Статус"] = "Обработано";
+                        row["Количество контрактов"] = ContractCountPerKFO;
+                    }
 
-            }
+                    catch (System.IO.IOException)
+                    {
+                        row["Статус"] = "Ошибка";
+                        row["Количество контрактов"] = DBNull.Value;
+                        continue;
+                    }
+
+                }
+            
         }
 
 
